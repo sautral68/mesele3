@@ -5,7 +5,7 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
-  workflow_dispatch:  # Вручную запустить можно из GitHub
+  workflow_dispatch:
 
 jobs:
   build-windows:
@@ -24,13 +24,15 @@ jobs:
       - name: Install mingw-w64 (Windows cross-compiler)
         run: sudo apt-get install -y gcc-mingw-w64-x86-64
 
+      - name: Show directory structure (debug)
+        run: find . -name "Cargo.toml" | head -20
+
       - name: Build Windows EXE
         run: cargo build --release --target x86_64-pc-windows-gnu
-        working-directory: mesele3
 
       - name: Upload EXE artifact
         uses: actions/upload-artifact@v4
         with:
           name: mesele3-windows-x64
-          path: mesele3/target/x86_64-pc-windows-gnu/release/mesele3.exe
+          path: target/x86_64-pc-windows-gnu/release/mesele3.exe
           retention-days: 30
